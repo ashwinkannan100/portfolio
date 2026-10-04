@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+
     <nav>
         <a href="../index.html">Home</a>
         <a href="../projects/index.html">Projects</a>
@@ -14,9 +15,126 @@
         <a href="../contact/index.html">Contact</a>
         <a href="https://github.com/ashwinkannan100" target="_blank">GitHub</a>
     </nav>
-    
-    <h1>Ashwin Kannan</h1>
-    <h4>askannan@ucsd.edu | (+1) 408-739-4768 | San Jose, CA |</h2>
+
+    <header>
+        <h1>Ashwin Kannan</h1>
+        <p>
+            <a href="mailto:askannan@ucsd.edu">askannan@ucsd.edu</a> |
+            (+1) 408-739-4768 |
+            San Jose, CA
+        </p>
+    </header>
+
+    <hr>
+
+    <section>
+        <h2>Education</h2>
+
+        <article>
+            <h3>University of California, San Diego</h3>
+            <p>
+                B.S. Data Science |
+                <time datetime="2028-06">Expected June 2028</time>
+            </p>
+
+            <ul>
+                <li>GPA: 3.9/4.0</li>
+                <li>Activities: Triton Trading Group, Eclipse Analytics, Data Science Society (DS3), IEEE</li>
+                <li>Current Coursework: Computer Vision, Theoretical Foundations of Data Science, Application of Data Science</li>
+            </ul>
+        </article>
+    </section>
+
+    <section>
+        <h2>Skills</h2>
+
+        <ul>
+            <li><strong>Languages:</strong> C, C++, Python, Java, JavaScript, HTML/CSS, SQL</li>
+            <li><strong>Libraries:</strong> Pandas, PyTorch, scikit-learn, OpenCV, NumPy, Matplotlib, Seaborn</li>
+            <li><strong>Networking:</strong> TCP, HTTP, Socket Programming, REST APIs</li>
+            <li><strong>Tools:</strong> Git/GitHub, Linux, gdb, Valgrind, JupyterLab</li>
+            <li><strong>AI Tools:</strong> Claude, GitHub Copilot, Codex</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Projects</h2>
+
+        <article>
+            <h3>Scooter AI: Real-Time Road Hazard Detection</h3>
+            <p>
+                <em>Python, YOLOv8, OpenCV</em> |
+                <time datetime="2026-05">May 2026</time>
+            </p>
+
+            <ul>
+                <li>Developed a real-time computer vision system for electric scooter safety using YOLOv8 and OpenCV to detect roadway hazards such as potholes, cracks, pedestrians, and obstacles from live camera feeds.</li>
+                <li>Trained and optimized custom object detection models on public datasets using Apple Silicon (MPS).</li>
+                <li>Built a unified real-time dashboard displaying live video, hazard classifications, bounding boxes, estimated distances, and alert notifications for smart mobility safety applications.</li>
+            </ul>
+        </article>
+
+        <article>
+            <h3>Evaluating Industry Salary Dynamics: A Decade of Change</h3>
+            <p>
+                <em>Pandas, scikit-learn</em> |
+                <time datetime="2025-12">December 2025</time>
+            </p>
+
+            <ul>
+                <li>Analyzed U.S. industry salary trends (2014-2024) across 800+ occupations using BLS Occupational Employment and Wage Statistics.</li>
+                <li>Conducted EDA on employment trends, median wage evolution using heatmaps and comparative charts.</li>
+                <li>Built predictive models (linear regression, random forest) with train/test splits to forecast median salaries for 2025-2030 and guide career planning for future graduates.</li>
+                <li>Assessed model performance with R<sup>2</sup>, RMSE, and feature importance.</li>
+            </ul>
+        </article>
+
+        <article>
+            <h3>Determinants of Rental Prices in San Diego</h3>
+            <p>
+                <em>Python, Pandas</em> |
+                <time datetime="2026-03">March 2026</time>
+            </p>
+
+            <ul>
+                <li>Built and analyzed a hedonic pricing model to study factors influencing rental prices across 1,467 San Diego listings, with emphasis on proximity to UCSD and coastal access.</li>
+                <li>Applied econometric and machine learning methods including OLS, Ridge/LASSO regression, Random Forest, and SHAP interpretation to model housing prices.</li>
+                <li>Performed data cleaning, feature engineering, and transformation (including log-price modeling) to address heteroscedasticity and improve model performance.</li>
+                <li>Identified structural housing features (square footage, bedrooms, bathrooms) and coastal proximity as the strongest predictors of rent, achieving up to R<sup>2</sup> = 0.705.</li>
+            </ul>
+        </article>
+
+        <article>
+            <h3>HTTP Chat Server</h3>
+            <p>
+                <em>C</em> |
+                <time datetime="2025-11">November 2025</time>
+            </p>
+
+            <ul>
+                <li>Built a multiclient HTTP chat server in C using low-level POSIX system calls (socket, bind, listen, accept, read, write) to handle live client requests.</li>
+                <li>Implemented request parsing, routing, and validation for REST-style endpoints (/chats, /post, /react) with robust HTTP error handling.</li>
+                <li>Designed memory-safe, dynamically allocated data structures for chats and reactions.</li>
+            </ul>
+        </article>
+    </section>
+
+    <section>
+        <h2>Volunteer Experience</h2>
+
+        <article>
+            <h3>PathToLearn Education — Co-Founder & Vice President</h3>
+            <p>
+                <time datetime="2021-05">May 2021</time> -
+                <time datetime="2021-07">July 2021</time>
+            </p>
+
+            <ul>
+                <li>Co-founded PathToLearn Education to inspire and equip young children with foundational skills in STEM.</li>
+                <li>Recruited 10 staff members and 50 students through strategic social media outreach.</li>
+            </ul>
+        </article>
+    </section>
 
 </body>
 </html>
