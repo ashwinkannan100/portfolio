@@ -3,19 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ashwin Kannan: Personal Site and Portfolio</title>
+    <title>Ashwin Kannan | Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav>
-        <a href="index.html">Home</a>
+    <nav aria-label="Main navigation">
+        <a class="current" aria-current="page" href="index.html">Home</a>
         <a href="projects/index.html">Projects</a>
         <a href="resume/index.html">Resume</a>
         <a href="contact/index.html">Contact</a>
-        <a href="https://github.com/ashwinkannan100" target="_blank">GitHub</a>
+        <a href="https://github.com/ashwinkannan100" target="_blank" rel="noopener noreferrer">GitHub</a>
     </nav>
-    <h1>Ashwin Kannan</h1>
-    <p>I'm a Data Science major at UC San Diego interested in software engineering, data science, and machine learning.</p>
-    <img src="images/ashwin.jpeg" alt="Photo of Ashwin Kannan" width="300" height="300">
+    <main>
+        <div class="home-intro">
+            <div>
+                <h1>Ashwin Kannan</h1>
+                <p>I'm a Data Science major at UC San Diego interested in software engineering, data science, and machine learning.</p>
+                <p>Explore my projects, learn more about my experience, or get in touch.</p>
+                <p><a href="projects/index.html">Explore my projects →</a></p>
+            </div>
+            <img class="profile-photo" src="images/ashwin.jpeg" alt="Photo of Ashwin Kannan" width="300" height="300">
+        </div>
+    </main>
 </body>
 </html>

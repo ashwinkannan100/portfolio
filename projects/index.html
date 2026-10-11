@@ -3,18 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects</title>
+    <title>Projects | Ashwin Kannan</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <nav>
+    <nav aria-label="Main navigation">
         <a href="../index.html">Home</a>
-        <a href="../projects/index.html">Projects</a>
+        <a class="current" aria-current="page" href="index.html">Projects</a>
         <a href="../resume/index.html">Resume</a>
         <a href="../contact/index.html">Contact</a>
-        <a href="https://github.com/ashwinkannan100" target="_blank">GitHub</a>
+        <a href="https://github.com/ashwinkannan100" target="_blank" rel="noopener noreferrer">GitHub</a>
     </nav>
-
-    <h1>Projects</h1>
+    <main>
+        <h1>Projects</h1>
+        <p>A selection of projects in computer vision, data analysis, machine learning, and systems programming.</p>
+        <div class="projects">
+            <article>
+                <h2>Scooter AI: Road Hazard Detection</h2>
+                <p class="project-tag">Python · YOLOv8 · OpenCV</p>
+                <p>Built a real-time computer vision system to identify roadway hazards from camera feeds, with object detection and visual alerts for scooter safety.</p>
+            </article>
+            <article>
+                <h2>San Diego Rental Price Analysis</h2>
+                <p class="project-tag">Python · Pandas · scikit-learn</p>
+                <p>Analyzed 1,467 rental listings to study how home features, proximity to UCSD, and coastal access relate to rent. Compared regression and random forest models.</p>
+            </article>
+            <article>
+                <h2>Industry Salary Dynamics</h2>
+                <p class="project-tag">Python · Pandas · Data Visualization</p>
+                <p>Explored U.S. salary trends from 2014-2024 across more than 800 occupations using Bureau of Labor Statistics data and predictive models.</p>
+            </article>
+            <article>
+                <h2>HTTP Chat Server</h2>
+                <p class="project-tag">C · POSIX Sockets · HTTP</p>
+                <p>Implemented a multiclient chat server with request parsing, REST-style endpoints, error handling, and dynamically allocated data structures.</p>
+            </article>
+        </div>
+    </main>
 </body>
 </html>
