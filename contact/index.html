@@ -3,34 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
+    <title>Contact | Ashwin Kannan</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <nav>
-        <a href="../index.html">Home</a>
-        <a href="../projects/index.html">Projects</a>
-        <a href="../resume/index.html">Resume</a>
-        <a href="../contact/index.html">Contact</a>
-        <a href="https://github.com/ashwinkannan100" target="_blank">GitHub</a>
-    </nav>
-
-    <h1>Contact</h1>
-    <form action="mailto:askannan@ucsd.edu" method="POST" enctype="text/plain">
-        <label>
-            Email:
-            <input type="email" name="email">
-        </label>
-        <label>
-            Subject:
-            <input name="subject">
-        </label>
-        <label>
-            Message:
-            <textarea name="body"></textarea>
-        </label>
-        <button>Submit</button>
-
-    </form>
+<main>
+        <h1>Contact</h1>
+        <p>Have a question or want to connect? Send me a message below.</p>
+        <form action="mailto:askannan@ucsd.edu">
+            <label for="subject">Subject:
+                <input type="text" id="subject" name="subject" required>
+            </label>
+            <label for="body">Message:
+                <textarea id="body" name="body" required></textarea>
+            </label>
+            <button type="submit">Open Email</button>
+        </form>
+        <p><small>Note: This form uses your email application to send the message.</small></p>
+    </main>
+    <script type="module" src="../global.js"></script>
 </body>
 </html>
