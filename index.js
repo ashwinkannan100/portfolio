@@ -1,7 +1,7 @@
 import { fetchJSON, renderProjects, fetchGitHubData } from './global.js';
 
-const projects = await fetchJSON('./lib/projects.json');
 const projectsContainer = document.querySelector('.projects');
+const projects = await fetchJSON('./lib/projects.json');
 renderProjects(Array.isArray(projects) ? projects.slice(0, 3) : [], projectsContainer, 'h3');
 
 const statsContainer = document.querySelector('#github-stats');
