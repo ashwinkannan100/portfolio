@@ -1,0 +1,86 @@
+[
+  {
+    "title": "Scooter AI: Road Hazard Detection",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Built a real-time computer vision system to identify roadway hazards from camera feeds, with object detection and visual alerts for scooter safety.",
+    "tags": "Python · YOLOv8 · OpenCV"
+  },
+  {
+    "title": "San Diego Rental Price Analysis",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Analyzed 1,467 rental listings to study how home features, proximity to UCSD, and coastal access relate to rent. Compared regression and random forest models.",
+    "tags": "Python · Pandas · scikit-learn"
+  },
+  {
+    "title": "Industry Salary Dynamics",
+    "year": 2025,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Explored U.S. salary trends from 2014–2024 across more than 800 occupations using Bureau of Labor Statistics data and predictive models.",
+    "tags": "Python · Pandas · Data Visualization"
+  },
+  {
+    "title": "HTTP Chat Server",
+    "year": 2025,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Implemented a multiclient chat server with request parsing, REST-style endpoints, error handling, and dynamically allocated data structures.",
+    "tags": "C · POSIX Sockets · HTTP"
+  },
+  {
+    "title": "EcoShift: Lower-Emission Compute Scheduling",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Developing a tool to identify lower-emission time windows for computationally intensive workloads using historical electricity and weather data.",
+    "tags": "Python · Energy Data · Machine Learning"
+  },
+  {
+    "title": "SpeakUp: Speech Feedback Tool",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Working on speech analysis that tracks speaking rate, filler words, and pauses, with synchronized transcript playback and feedback.",
+    "tags": "Python · Speech Analysis · AWS"
+  },
+  {
+    "title": "Wildfire Rescue Reinforcement Learning",
+    "year": 2025,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Built a reinforcement-learning project exploring decision-making in a wildfire rescue simulation.",
+    "tags": "Python · Reinforcement Learning"
+  },
+  {
+    "title": "Medelite Streamlit CMS",
+    "year": 2025,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Created a Streamlit-based content management interface for organizing and presenting project data.",
+    "tags": "Python · Streamlit"
+  },
+  {
+    "title": "Language Models Coursework",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Completed coursework exploring language models and model-based methods for working with text data.",
+    "tags": "Python · Machine Learning"
+  },
+  {
+    "title": "NYPD Complaint Data Visualization",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Analyzed public police complaint data and developed visual comparisons of complaint counts and substantiation outcomes.",
+    "tags": "Python · Data Analysis · Visualization"
+  },
+  {
+    "title": "Grocery Product Data Analysis",
+    "year": 2025,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Compared grocery product data across retailers to investigate differences in product composition and processing categories.",
+    "tags": "Python · Pandas · Data Analysis"
+  },
+  {
+    "title": "MNIST Digit Classification",
+    "year": 2026,
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Trained a PyTorch multilayer perceptron to classify handwritten digits from the MNIST dataset.",
+    "tags": "Python · PyTorch · Neural Networks"
+  }
+]

@@ -101,3 +101,74 @@ form?.addEventListener('submit', (event) => {
     const url = `${form.action}?${parameters.join('&')}`;
     location.href = url;
 });
+
+
+// Lab 4: Fetch JSON data and return the parsed result.
+export async function fetchJSON(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Request failed (${response.status} ${response.statusText})`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching or parsing JSON data:', error);
+        return [];
+    }
+}
+
+// Lab 4: Render project data into a container. Accepts an array of projects.
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+    if (!containerElement) {
+        console.error('renderProjects: projects container was not found.');
+        return;
+    }
+
+    containerElement.replaceChildren();
+
+    if (!Array.isArray(projects) || projects.length === 0) {
+        const message = document.createElement('p');
+        message.textContent = 'No projects to display yet.';
+        containerElement.append(message);
+        return;
+    }
+
+    const validHeading = /^h[1-6]$/.test(headingLevel) ? headingLevel : 'h2';
+
+    for (const project of projects) {
+        const article = document.createElement('article');
+        const heading = document.createElement(validHeading);
+        heading.textContent = project.title || 'Untitled project';
+        article.append(heading);
+
+        if (project.year) {
+            const year = document.createElement('p');
+            year.className = 'project-tag';
+            year.textContent = String(project.year);
+            article.append(year);
+        }
+
+        if (project.image) {
+            const image = document.createElement('img');
+            image.src = project.image;
+            image.alt = project.title ? `${project.title} project image` : 'Project image';
+            image.loading = 'lazy';
+            image.addEventListener('error', () => image.remove(), { once: true });
+            article.append(image);
+        }
+
+        const description = document.createElement('p');
+        description.textContent = project.description || 'Description coming soon.';
+        article.append(description);
+        containerElement.append(article);
+    }
+}
+
+// Lab 4: Retrieve public profile information from the GitHub API.
+export async function fetchGitHubData(username) {
+    const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+    if (!response.ok) {
+        throw new Error(`GitHub API request failed (${response.status})`);
+    }
+    return response.json();
+}
