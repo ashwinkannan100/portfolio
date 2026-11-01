@@ -8,12 +8,26 @@
 </head>
 <body>
 <main>
-        <h1 class="projects-title">Projects</h1>
-        <p>A selection of projects in computer vision, data analysis, machine learning, and systems programming.</p>
-        <div class="projects"></div>
-    </main>
-    <script type="module" src="../global.js"></script>
-    <script type="module" src="projects.js"></script>
+    <h1 class="projects-title">Projects</h1>
+    <p>A selection of projects in computer vision, data analysis, machine learning, and systems programming.</p>
+
+    <section class="projects-tools" aria-label="Project filters">
+        <label for="project-search">Search projects</label>
+        <input class="searchBar" id="project-search" type="search" placeholder="Search by title, description, year, tags…">
+    </section>
+
+    <section class="projects-visualization" aria-labelledby="projects-chart-heading">
+        <h2 id="projects-chart-heading">Projects by year</h2>
+        <p>Click a slice or legend item to filter projects by year. Click it again to clear the year filter.</p>
+        <div class="chart-layout">
+            <svg id="projects-plot" viewBox="-50 -50 100 100" role="img" aria-label="Pie chart showing number of projects by year"></svg>
+            <ul class="legend" aria-label="Project year legend"></ul>
+        </div>
+    </section>
+
+    <div class="projects"></div>
+</main>
+<script type="module" src="../global.js"></script>
+<script type="module" src="projects.js"></script>
 </body>
 </html>
-

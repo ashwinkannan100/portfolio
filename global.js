@@ -4,7 +4,6 @@ function $$(selector, context = document) {
     return Array.from(context.querySelectorAll(selector));
 }
 
-// Work out the site's base path so links work on a local server and GitHub Pages.
 const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 let BASE_PATH = '/';
 
@@ -20,7 +19,6 @@ if (!isLocal && location.hostname.endsWith('github.io')) {
     }
 }
 
-// Create the navigation menu once, so every page uses the same links.
 const pages = [
     { url: '', title: 'Home' },
     { url: 'projects/', title: 'Projects' },
@@ -51,13 +49,10 @@ for (const page of pages) {
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
     }
-
     nav.append(link);
 }
-
 document.body.prepend(nav);
 
-// Add a theme selector. CSS handles the automatic operating-system theme.
 document.body.insertAdjacentHTML(
     'afterbegin',
     `<label class="color-scheme">Theme:
@@ -68,48 +63,33 @@ document.body.insertAdjacentHTML(
         </select>
     </label>`
 );
-
 const themeSelect = document.querySelector('.color-scheme select');
 
 function setColorScheme(colorScheme) {
     document.documentElement.style.setProperty('color-scheme', colorScheme);
     themeSelect.value = colorScheme;
 }
-
-if ('colorScheme' in localStorage) {
-    setColorScheme(localStorage.colorScheme);
-}
-
-themeSelect.addEventListener('input', (event) => {
+if ('colorScheme' in localStorage) setColorScheme(localStorage.colorScheme);
+themeSelect.addEventListener('input', event => {
     const colorScheme = event.target.value;
     setColorScheme(colorScheme);
     localStorage.colorScheme = colorScheme;
 });
 
-// Improve the mailto contact form by encoding spaces and special characters correctly.
 const form = document.querySelector('form');
-form?.addEventListener('submit', (event) => {
+form?.addEventListener('submit', event => {
     event.preventDefault();
-
     const data = new FormData(form);
     const parameters = [];
-
-    for (const [name, value] of data) {
-        parameters.push(`${name}=${encodeURIComponent(value)}`);
-    }
-
+    for (const [name, value] of data) parameters.push(`${name}=${encodeURIComponent(value)}`);
     const url = `${form.action}?${parameters.join('&')}`;
     location.href = url;
 });
 
-
-// Lab 4: Fetch JSON data and return the parsed result.
 export async function fetchJSON(url) {
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Request failed (${response.status} ${response.statusText})`);
-        }
+        if (!response.ok) throw new Error(`Request failed (${response.status} ${response.statusText})`);
         return await response.json();
     } catch (error) {
         console.error('Error fetching or parsing JSON data:', error);
@@ -117,37 +97,30 @@ export async function fetchJSON(url) {
     }
 }
 
-// Lab 4: Render project data into a container. Accepts an array of projects.
 export function renderProjects(projects, containerElement, headingLevel = 'h2') {
     if (!containerElement) {
         console.error('renderProjects: projects container was not found.');
         return;
     }
-
     containerElement.replaceChildren();
-
     if (!Array.isArray(projects) || projects.length === 0) {
         const message = document.createElement('p');
         message.textContent = 'No projects to display yet.';
         containerElement.append(message);
         return;
     }
-
     const validHeading = /^h[1-6]$/.test(headingLevel) ? headingLevel : 'h2';
-
     for (const project of projects) {
         const article = document.createElement('article');
         const heading = document.createElement(validHeading);
         heading.textContent = project.title || 'Untitled project';
         article.append(heading);
-
         if (project.year) {
             const year = document.createElement('p');
             year.className = 'project-tag';
             year.textContent = String(project.year);
             article.append(year);
         }
-
         if (project.image) {
             const image = document.createElement('img');
             image.src = project.image;
@@ -156,7 +129,6 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
             image.addEventListener('error', () => image.remove(), { once: true });
             article.append(image);
         }
-
         const description = document.createElement('p');
         description.textContent = project.description || 'Description coming soon.';
         article.append(description);
@@ -164,11 +136,8 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     }
 }
 
-// Lab 4: Retrieve public profile information from the GitHub API.
 export async function fetchGitHubData(username) {
     const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
-    if (!response.ok) {
-        throw new Error(`GitHub API request failed (${response.status})`);
-    }
+    if (!response.ok) throw new Error(`GitHub API request failed (${response.status})`);
     return response.json();
 }
