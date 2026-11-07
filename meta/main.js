@@ -99,7 +99,7 @@ function renderLanguageBreakdown(selected) {
 
   const counts = d3.rollups(
   selected.flatMap(commit => commit.lines),
-  rows => rows.length,
+  rows => d3.sum(rows, d => d.length),
   d => d.type || 'Unknown'
 ).sort((a, b) => d3.descending(a[1], b[1]));
 
