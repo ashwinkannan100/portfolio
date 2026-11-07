@@ -9,7 +9,7 @@ let BASE_PATH = '/';
 
 if (!isLocal && location.hostname.endsWith('github.io')) {
     const pathParts = location.pathname.split('/').filter(Boolean);
-    const knownSections = ['projects', 'resume', 'contact'];
+    const knownSections = ['projects', 'resume', 'contact', 'meta'];
     const sectionIndex = pathParts.findIndex((part) => knownSections.includes(part));
 
     if (sectionIndex > 0) {
@@ -24,6 +24,7 @@ const pages = [
     { url: 'projects/', title: 'Projects' },
     { url: 'resume/', title: 'Resume' },
     { url: 'contact/', title: 'Contact' },
+    { url: 'meta/', title: 'Meta' },
     { url: 'https://github.com/ashwinkannan100', title: 'GitHub' },
 ];
 

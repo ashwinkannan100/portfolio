@@ -1,0 +1,7 @@
+{
+  "name": "ashwin-portfolio",
+  "private": true,
+  "devDependencies": {
+    "elocuent": "*"
+  }
+}

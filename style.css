@@ -124,3 +124,60 @@ button:hover { filter:brightness(.9); }
     border-radius: 3px;
     flex: 0 0 auto;
 }
+
+
+/* Lab 6: codebase activity visualization */
+/* Lab 6: repository activity visualization */
+.meta-summary, .meta-visualization {
+  margin-block: 2em;
+  padding: 1.25em;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+.meta-summary h2, .meta-visualization h2 { margin-top: 0; }
+.meta-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
+  gap: 1em;
+  margin: 0;
+}
+.meta-stats div {
+  padding: .8em;
+  border-radius: 8px;
+  background: color-mix(in oklch, CanvasText 5%, Canvas);
+}
+.meta-stats dt { font-size: .9em; color: color-mix(in oklch, CanvasText 65%, Canvas); }
+.meta-stats dd { margin: .25em 0 0; font-size: 1.25em; font-weight: 700; overflow-wrap: anywhere; }
+#commits-plot { display: block; width: 100%; height: auto; overflow: visible; }
+#commits-plot .grid line { stroke: var(--color-border); stroke-opacity: .8; }
+#commits-plot .grid path { display: none; }
+#commits-plot .domain, #commits-plot .tick line { stroke: var(--color-border); }
+#commits-plot .tick text, #commits-plot .axis-label { fill: CanvasText; }
+#commits-plot circle { cursor: crosshair; transition: fill-opacity .12s; }
+#commits-plot circle.selected { stroke: CanvasText; stroke-width: 1.5; }
+#commits-plot .brush .selection { fill: var(--color-accent); fill-opacity: .18; stroke: var(--color-accent); }
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  max-width: min(22em, calc(100vw - 2em));
+  padding: .8em 1em;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: 0 4px 18px #0003;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .2em .8em;
+  font-size: .9em;
+}
+.tooltip[hidden] { display: none; }
+.tooltip dt { font-weight: 700; }
+.tooltip dd { margin: 0; overflow-wrap: anywhere; }
+#language-breakdown { margin-top: 1em; }
+#language-breakdown h3 { margin-bottom: .4em; }
+@media (max-width: 600px) {
+  .meta-summary, .meta-visualization { padding: .8em; }
+  #commits-plot { min-height: 260px; }
+}

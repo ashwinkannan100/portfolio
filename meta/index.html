@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta | Ashwin Kannan</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+  <h1>Codebase Activity</h1>
+  <p>This page visualizes the development history of my portfolio. Each point represents a commit. Its position shows when the commit happened, and its size represents how many lines were changed.</p>
+
+  <section class="meta-summary" aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Repository summary</h2>
+    <div id="commit-info" aria-live="polite">Loading repository data…</div>
+  </section>
+
+  <section class="meta-visualization" aria-labelledby="plot-heading">
+    <h2 id="plot-heading">Commits over time</h2>
+    <p>Brush over a region of the chart to select commits. Hover over a point to inspect its details.</p>
+    <p id="selection-count" aria-live="polite">No commits selected.</p>
+    <svg id="commits-plot" role="img" aria-label="Scatterplot of repository commits by date and time of day"></svg>
+    <div id="language-breakdown" aria-live="polite"></div>
+  </section>
+</main>
+
+<dl id="commit-tooltip" class="info tooltip" hidden>
+  <dt>Commit</dt><dd class="commit-id"></dd>
+  <dt>Date</dt><dd class="commit-date"></dd>
+  <dt>Time</dt><dd class="commit-time"></dd>
+  <dt>Lines changed</dt><dd class="commit-lines"></dd>
+  <dt>Author</dt><dd class="commit-author"></dd>
+  <dt>Message</dt><dd class="commit-message"></dd>
+  <dt>Details</dt><dd><a class="commit-link" target="_blank" rel="noopener noreferrer">View commit</a></dd>
+</dl>
+
+<script type="module" src="../global.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>
