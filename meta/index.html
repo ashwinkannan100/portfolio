@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meta | Ashwin Kannan</title>
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../meta-lab8.css">
 </head>
 <body>
 <main>
   <h1>Codebase Activity</h1>
   <p>This page visualizes the development history of my portfolio. Each point represents a commit. Its position shows when the commit happened, and its size represents how many lines were changed.</p>
+
+  <section class="meta-controls" aria-label="Commit timeline controls">
+    <label for="commit-progress">Show commits until: <time id="commit-time"></time></label>
+    <input type="range" id="commit-progress" min="0" max="100" value="100" step="1">
+  </section>
 
   <section class="meta-summary" aria-labelledby="summary-heading">
     <h2 id="summary-heading">Repository summary</h2>
@@ -18,10 +24,22 @@
 
   <section class="meta-visualization" aria-labelledby="plot-heading">
     <h2 id="plot-heading">Commits over time</h2>
-    <p>Brush over a region of the chart to select commits. Hover over a point to inspect its details.</p>
-    <p id="selection-count" aria-live="polite">No commits selected.</p>
-    <svg id="commits-plot" role="img" aria-label="Scatterplot of repository commits by date and time of day"></svg>
-    <div id="language-breakdown" aria-live="polite"></div>
+    <p>Move the slider or scroll through the story to explore commit history. Brush the chart to select commits, or hover over a point for details.</p>
+    <div id="scrolly-1">
+      <div id="scatter-story" aria-label="Commit history story"></div>
+      <div id="scatter-plot">
+        <p id="selection-count" aria-live="polite">No commits selected.</p>
+        <svg id="commits-plot" role="img" aria-label="Scatterplot of repository commits by date and time of day"></svg>
+        <div id="language-breakdown" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="meta-visualization" aria-labelledby="files-heading">
+    <h2 id="files-heading">The race for the biggest file</h2>
+    <p>Each dot represents a line recorded in the commit dataset. Files are ordered by number of lines, and colors represent technologies.</p>
+    <div id="file-legend" aria-label="Technology color legend"></div>
+    <dl id="files"></dl>
   </section>
 </main>
 

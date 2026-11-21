@@ -1,0 +1,27 @@
+/* Lab 8 additions; keep your existing style.css unchanged. */
+.meta-controls { display: grid; gap: .6rem; padding: 1rem 1.25rem; border: 1px solid var(--color-border); border-radius: 12px; }
+.meta-controls label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; font-weight: 600; }
+#commit-progress { width: 100%; cursor: pointer; }
+#scrolly-1 { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 1.25rem; align-items: start; }
+#scatter-story { min-width: 0; }
+#scatter-plot { position: sticky; top: 1rem; min-width: 0; max-height: 95vh; overflow: auto; }
+#scatter-story .step { min-height: 65vh; padding: 1.1rem; margin-bottom: 1rem; border-left: 3px solid var(--color-border); opacity: .55; transition: opacity 200ms, border-color 200ms, background 200ms; }
+#scatter-story .step.active { opacity: 1; border-left-color: var(--color-accent); background: color-mix(in oklch, var(--color-accent), Canvas 94%); }
+#scatter-story .step h3 { overflow-wrap: anywhere; }
+#commits-plot circle { transition: cx 200ms, cy 200ms, r 200ms, fill-opacity 200ms; }
+#files { display: grid; grid-template-columns: minmax(10em, 1fr) minmax(0, 3fr); gap: 1rem; }
+#files .file-row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; padding-block: .7rem; border-bottom: 1px solid var(--color-border); }
+#files dt { min-width: 0; overflow-wrap: anywhere; }
+#files dt small { display: block; opacity: .7; margin-top: .25rem; }
+#files dd { display: flex; flex-wrap: wrap; align-content: start; align-items: start; gap: .15em; margin: 0; min-width: 0; }
+#files .loc { width: .5em; aspect-ratio: 1; flex: 0 0 .5em; background: var(--dot-color, steelblue); border-radius: 50%; }
+#file-legend { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin: 1rem 0; font-size: .85em; }
+.file-legend-item { display: inline-flex; align-items: center; gap: .4em; }
+.file-legend-item i { display: inline-block; width: .8em; height: .8em; border-radius: 50%; }
+@media (max-width: 750px) {
+  #scrolly-1 { grid-template-columns: 1fr; }
+  #scatter-plot { grid-row: 1; top: .5rem; z-index: 2; max-height: 48vh; background: Canvas; border-bottom: 1px solid var(--color-border); }
+  #scatter-story { grid-row: 2; }
+  #scatter-story .step { min-height: 45vh; }
+  #files { grid-template-columns: minmax(6em, 1fr) minmax(0, 2fr); }
+}
