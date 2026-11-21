@@ -40,7 +40,7 @@ function makeCommits(data) {
       timezone: first.timezone,
       datetime: first.datetime,
       hourFrac: first.datetime.getHours() + first.datetime.getMinutes() / 60,
-      totalLines: lines.length
+      totalLines: d3.sum(lines, d => d.length)
     };
     Object.defineProperty(commit, 'lines', { value: lines });
     return commit;
@@ -50,15 +50,15 @@ function makeCommits(data) {
 function renderCommitInfo(data, commits) {
   const files = new Set(data.map(d => d.file));
   const longestFile = d3.greatest(
-    d3.rollups(data, rows => rows.length, d => d.file),
+    d3.rollups(data, rows => d3.sum(rows, d => d.length), d => d.file),
     d => d[1]
   );
   const stats = [
-    ['Recorded lines', data.length.toLocaleString()],
+    ['Lines of code', d3.sum(data, d => d.length).toLocaleString()],
     ['Commits', commits.length.toLocaleString()],
     ['Files touched', files.size.toLocaleString()],
     ['Average lines per commit', d3.mean(commits, d => d.totalLines)?.toFixed(1) ?? '0'],
-    ['File with most recorded lines', longestFile ? `${longestFile[0]} (${longestFile[1].toLocaleString()} lines)` : 'N/A']
+    ['Longest file by changed lines', longestFile ? `${longestFile[0]} (${longestFile[1].toLocaleString()} lines)` : 'N/A']
   ];
   summary.replaceChildren();
   const list = document.createElement('dl');
@@ -96,7 +96,7 @@ function renderLanguageBreakdown(selected) {
   }
   const counts = d3.rollups(
     selected.flatMap(commit => commit.lines),
-    rows => rows.length,
+    rows => d3.sum(rows, d => d.length),
     d => d.type || 'Unknown'
   ).sort((a, b) => d3.descending(a[1], b[1]));
   const heading = document.createElement('h3');
@@ -186,14 +186,10 @@ function createChart(commits) {
 
 function updateFileDisplay(commits) {
   const lines = commits.flatMap(commit => commit.lines);
-  // Show the current dataset coverage so changes are visible even when
-  // the same file remains the largest.
-  const fileSection = document.querySelector('#files');
-  fileSection.setAttribute('aria-label', `${lines.length} recorded lines through ${commits.length} commits`);
   const files = d3.groups(lines, d => d.file)
     .map(([name, fileLines]) => ({ name, lines: fileLines }))
     .sort((a, b) => b.lines.length - a.lines.length);
-  const fileRows = d3.select('#files').selectAll('.file-row')
+  const fileRows = d3.select('#files').selectAll(':scope > div')
     .data(files, d => d.name)
     .join(enter => {
       const row = enter.append('div').attr('class', 'file-row');
@@ -213,7 +209,7 @@ function updateFileDisplay(commits) {
     .style('--dot-color', d => technologyColors(d.type || 'Unknown'))
     .attr('title', d => `${d.type || 'Unknown'} · ${d.file}`);
   const technologies = [...new Set(lines.map(d => d.type || 'Unknown'))].sort();
-  d3.select('#file-legend').selectAll('.file-legend-item')
+  d3.select('#file-legend').selectAll('span')
     .data(technologies, d => d)
     .join('span')
     .attr('class', 'file-legend-item')
@@ -239,7 +235,7 @@ function renderStory(commits, setProgress) {
         dateStyle: 'medium', timeStyle: 'short'
       }));
       const paragraph = node.append('p');
-      paragraph.append('span').text(`This commit has ${commit.totalLines.toLocaleString()} recorded lines across ${new Set(commit.lines.map(d => d.file)).size} files. `);
+      paragraph.append('span').text(`I changed ${commit.totalLines.toLocaleString()} lines across ${new Set(commit.lines.map(d => d.file)).size} files. `);
       paragraph.append('a').attr('href', commit.url)
         .attr('target', '_blank').attr('rel', 'noopener noreferrer')
         .text('View this commit');
@@ -259,37 +255,22 @@ async function main() {
     if (!data.length) throw new Error('loc.csv is empty. Generate it using the command in README-LAB6.md.');
     const commits = makeCommits(data);
     const updateChart = createChart(commits);
-    // Use the commit index rather than a rounded timestamp. Every slider
-    // position corresponds to a real commit, so files change predictably.
-    progressSlider.min = '0';
-    progressSlider.max = String(commits.length - 1);
-    progressSlider.step = '1';
-    let activeIndex = -1;
+    const timeline = d3.scaleTime()
+      .domain(d3.extent(commits, d => d.datetime))
+      .range([0, 100]);
 
-    function updateToIndex(index) {
-      index = Math.max(0, Math.min(commits.length - 1, Math.round(index)));
-      if (index === activeIndex) return;
-      activeIndex = index;
-      const filtered = commits.slice(0, index + 1);
-      const last = commits[index];
-      progressSlider.value = String(index);
-      progressTime.textContent = last.datetime.toLocaleString('en-US', {
-        dateStyle: 'medium', timeStyle: 'short'
-      });
-      progressTime.dateTime = last.datetime.toISOString();
+    function updateToDate(date) {
+      const filtered = commits.filter(d => d.datetime <= date);
+      progressSlider.value = String(Math.max(0, Math.min(100, timeline(date))));
+      progressTime.textContent = date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      progressTime.dateTime = date.toISOString();
       updateChart(filtered);
       renderCommitInfo(filtered.flatMap(d => d.lines), filtered);
       updateFileDisplay(filtered);
     }
-
-    progressSlider.addEventListener('input', () => {
-      updateToIndex(Number(progressSlider.value));
-    });
-    updateToIndex(commits.length - 1);
-    renderStory(commits, date => {
-      const index = commits.findIndex(commit => +commit.datetime === +date);
-      if (index >= 0) updateToIndex(index);
-    });
+    progressSlider.addEventListener('input', () => updateToDate(timeline.invert(+progressSlider.value)));
+    updateToDate(timeline.invert(100));
+    renderStory(commits, updateToDate);
   } catch (error) {
     console.error(error);
     summary.textContent = `Could not load repository data: ${error.message}`;
