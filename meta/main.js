@@ -1,3 +1,4 @@
+
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
@@ -40,7 +41,7 @@ function makeCommits(data) {
       timezone: first.timezone,
       datetime: first.datetime,
       hourFrac: first.datetime.getHours() + first.datetime.getMinutes() / 60,
-      totalLines: d3.sum(lines, d => d.length)
+      totalLines: lines.length
     };
     Object.defineProperty(commit, 'lines', { value: lines });
     return commit;
@@ -50,15 +51,15 @@ function makeCommits(data) {
 function renderCommitInfo(data, commits) {
   const files = new Set(data.map(d => d.file));
   const longestFile = d3.greatest(
-    d3.rollups(data, rows => d3.sum(rows, d => d.length), d => d.file),
+    d3.rollups(data, rows => rows.length, d => d.file),
     d => d[1]
   );
   const stats = [
-    ['Lines of code', d3.sum(data, d => d.length).toLocaleString()],
+    ['Recorded lines', data.length.toLocaleString()],
     ['Commits', commits.length.toLocaleString()],
     ['Files touched', files.size.toLocaleString()],
     ['Average lines per commit', d3.mean(commits, d => d.totalLines)?.toFixed(1) ?? '0'],
-    ['Longest file by changed lines', longestFile ? `${longestFile[0]} (${longestFile[1].toLocaleString()} lines)` : 'N/A']
+    ['File with most recorded lines', longestFile ? `${longestFile[0]} (${longestFile[1].toLocaleString()} lines)` : 'N/A']
   ];
   summary.replaceChildren();
   const list = document.createElement('dl');
@@ -96,7 +97,7 @@ function renderLanguageBreakdown(selected) {
   }
   const counts = d3.rollups(
     selected.flatMap(commit => commit.lines),
-    rows => d3.sum(rows, d => d.length),
+    rows => rows.length,
     d => d.type || 'Unknown'
   ).sort((a, b) => d3.descending(a[1], b[1]));
   const heading = document.createElement('h3');
@@ -104,7 +105,7 @@ function renderLanguageBreakdown(selected) {
   const list = document.createElement('ul');
   for (const [language, count] of counts) {
     const item = document.createElement('li');
-    item.textContent = `${language}: ${count} changed lines`;
+    item.textContent = `${language}: ${count} recorded lines`;
     list.append(item);
   }
   languageBreakdown.append(heading, list);
@@ -154,7 +155,6 @@ function createChart(commits) {
 
   function update(filtered) {
     displayedCommits = filtered;
-    // Keep the original date domain stable, so points don't jump as the timeline advances.
     xAxis.call(d3.axisBottom(xScale));
     const sorted = [...filtered].sort((a, b) => d3.descending(a.totalLines, b.totalLines));
     dots = dotsLayer.selectAll('circle')
@@ -189,7 +189,7 @@ function updateFileDisplay(commits) {
   const files = d3.groups(lines, d => d.file)
     .map(([name, fileLines]) => ({ name, lines: fileLines }))
     .sort((a, b) => b.lines.length - a.lines.length);
-  const fileRows = d3.select('#files').selectAll(':scope > div')
+  const fileRows = d3.select('#files').selectAll('.file-row')
     .data(files, d => d.name)
     .join(enter => {
       const row = enter.append('div').attr('class', 'file-row');
@@ -209,7 +209,7 @@ function updateFileDisplay(commits) {
     .style('--dot-color', d => technologyColors(d.type || 'Unknown'))
     .attr('title', d => `${d.type || 'Unknown'} · ${d.file}`);
   const technologies = [...new Set(lines.map(d => d.type || 'Unknown'))].sort();
-  d3.select('#file-legend').selectAll('span')
+  d3.select('#file-legend').selectAll('.file-legend-item')
     .data(technologies, d => d)
     .join('span')
     .attr('class', 'file-legend-item')
@@ -235,7 +235,7 @@ function renderStory(commits, setProgress) {
         dateStyle: 'medium', timeStyle: 'short'
       }));
       const paragraph = node.append('p');
-      paragraph.append('span').text(`I changed ${commit.totalLines.toLocaleString()} lines across ${new Set(commit.lines.map(d => d.file)).size} files. `);
+      paragraph.append('span').text(`This commit has ${commit.totalLines.toLocaleString()} recorded lines across ${new Set(commit.lines.map(d => d.file)).size} files. `);
       paragraph.append('a').attr('href', commit.url)
         .attr('target', '_blank').attr('rel', 'noopener noreferrer')
         .text('View this commit');
