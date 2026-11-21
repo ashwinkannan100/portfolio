@@ -14,7 +14,7 @@
 #files dt { min-width: 0; overflow-wrap: anywhere; }
 #files dt small { display: block; opacity: .7; margin-top: .25rem; }
 #files dd { display: flex; flex-wrap: wrap; align-content: start; align-items: start; gap: .15em; margin: 0; min-width: 0; }
-#files .loc { width: .5em; aspect-ratio: 1; flex: 0 0 .5em; background: var(--dot-color, steelblue); border-radius: 50%; }
+#files .loc { width: .5em; aspect-ratio: 1; flex: 0 0 .5em; background: var(--color, steelblue); opacity: var(--age-opacity, 1); border-radius: 50%; }
 #file-legend { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin: 1rem 0; font-size: .85em; }
 .file-legend-item { display: inline-flex; align-items: center; gap: .4em; }
 .file-legend-item i { display: inline-block; width: .8em; height: .8em; border-radius: 50%; }
@@ -25,3 +25,7 @@
   #scatter-story .step { min-height: 45vh; }
   #files { grid-template-columns: minmax(6em, 1fr) minmax(0, 2fr); }
 }
+
+#file-status { font-size: .9em; color: var(--color-text-muted, inherit); opacity: .75; }
+#files .file-row { transition: opacity 160ms ease; }
+#files dd { padding-top: .6em; }

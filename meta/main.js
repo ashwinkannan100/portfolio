@@ -40,7 +40,7 @@ function makeCommits(data) {
       timezone: first.timezone,
       datetime: first.datetime,
       hourFrac: first.datetime.getHours() + first.datetime.getMinutes() / 60,
-      totalLines: d3.sum(lines, d => d.length)
+      totalLines: lines.length
     };
     Object.defineProperty(commit, 'lines', { value: lines });
     return commit;
@@ -50,15 +50,15 @@ function makeCommits(data) {
 function renderCommitInfo(data, commits) {
   const files = new Set(data.map(d => d.file));
   const longestFile = d3.greatest(
-    d3.rollups(data, rows => d3.sum(rows, d => d.length), d => d.file),
+    d3.rollups(data, rows => rows.length, d => d.file),
     d => d[1]
   );
   const stats = [
-    ['Lines of code', d3.sum(data, d => d.length).toLocaleString()],
+    ['Recorded lines', data.length.toLocaleString()],
     ['Commits', commits.length.toLocaleString()],
     ['Files touched', files.size.toLocaleString()],
     ['Average lines per commit', d3.mean(commits, d => d.totalLines)?.toFixed(1) ?? '0'],
-    ['Longest file by changed lines', longestFile ? `${longestFile[0]} (${longestFile[1].toLocaleString()} lines)` : 'N/A']
+    ['File with most recorded lines', longestFile ? `${longestFile[0]} (${longestFile[1].toLocaleString()} lines)` : 'N/A']
   ];
   summary.replaceChildren();
   const list = document.createElement('dl');
@@ -96,7 +96,7 @@ function renderLanguageBreakdown(selected) {
   }
   const counts = d3.rollups(
     selected.flatMap(commit => commit.lines),
-    rows => d3.sum(rows, d => d.length),
+    rows => rows.length,
     d => d.type || 'Unknown'
   ).sort((a, b) => d3.descending(a[1], b[1]));
   const heading = document.createElement('h3');
@@ -184,41 +184,68 @@ function createChart(commits) {
   return update;
 }
 
-function updateFileDisplay(commits) {
-  const lines = commits.flatMap(commit => commit.lines);
+// Each row in loc.csv represents one line, attributed to its last modifying commit.
+// Filter by commit date, group lines by file, and rebind all dots on every update.
+function updateFileDisplay(filteredCommits) {
+  const lines = filteredCommits.flatMap(commit => commit.lines);
   const files = d3.groups(lines, d => d.file)
     .map(([name, fileLines]) => ({ name, lines: fileLines }))
-    .sort((a, b) => b.lines.length - a.lines.length);
-  const fileRows = d3.select('#files').selectAll(':scope > div')
+    .sort((a, b) => b.lines.length - a.lines.length || d3.ascending(a.name, b.name));
+
+  const container = d3.select('#files');
+  const rows = container.selectAll(':scope > .file-row')
     .data(files, d => d.name)
-    .join(enter => {
-      const row = enter.append('div').attr('class', 'file-row');
-      const term = row.append('dt');
-      term.append('code');
-      term.append('small');
-      row.append('dd');
-      return row;
-    });
-  fileRows.order();
-  fileRows.select('dt code').text(d => d.name);
-  fileRows.select('dt small').text(d => `${d.lines.length.toLocaleString()} lines`);
-  fileRows.select('dd').selectAll('.loc')
-    .data(d => d.lines, (d, i) => `${d.commit}:${d.file}:${d.line}:${i}`)
-    .join('div')
-    .attr('class', 'loc')
-    .style('--dot-color', d => technologyColors(d.type || 'Unknown'))
-    .attr('title', d => `${d.type || 'Unknown'} · ${d.file}`);
+    .join(
+      enter => {
+        const row = enter.append('div').attr('class', 'file-row');
+        const dt = row.append('dt');
+        dt.append('code');
+        dt.append('small');
+        row.append('dd');
+        return row;
+      },
+      update => update,
+      exit => exit.remove()
+    );
+
+  // D3's .order() moves existing DOM rows into their new sorted order.
+  rows.order();
+  rows.select('dt code').text(d => d.name);
+  rows.select('dt small').text(d => `${d.lines.length.toLocaleString()} lines`);
+
+  const dates = lines.map(d => d.datetime.getTime());
+  const minDate = dates.length ? d3.min(dates) : 0;
+  const maxDate = dates.length ? d3.max(dates) : 1;
+  const ageOpacity = d3.scaleLinear()
+    .domain(minDate === maxDate ? [minDate - 1, maxDate] : [minDate, maxDate])
+    .range([0.35, 1]).clamp(true);
+
+  rows.select('dd').selectAll('.loc')
+    .data(d => d.lines, d => `${d.commit}:${d.file}:${d.line}`)
+    .join(
+      enter => enter.append('div').attr('class', 'loc'),
+      update => update,
+      exit => exit.remove()
+    )
+    .style('--color', d => technologyColors(d.type || 'Unknown'))
+    .style('--age-opacity', d => ageOpacity(d.datetime.getTime()))
+    .attr('title', d => `${d.file}:${d.line} · ${d.type || 'Unknown'} · ${d.datetime.toLocaleDateString('en-US')}`);
+
   const technologies = [...new Set(lines.map(d => d.type || 'Unknown'))].sort();
-  d3.select('#file-legend').selectAll('span')
+  d3.select('#file-legend').selectAll('.file-legend-item')
     .data(technologies, d => d)
     .join('span')
     .attr('class', 'file-legend-item')
-    .html('')
     .each(function(type) {
       const item = d3.select(this);
-      item.append('i').style('background', technologyColors(type));
-      item.append('span').text(type);
+      item.selectAll('i').data([type]).join('i')
+        .style('background', technologyColors(type));
+      item.selectAll('span').data([type]).join('span').text(type);
     });
+
+  d3.select('#file-status').text(
+    `${lines.length.toLocaleString()} recorded lines in ${files.length} files through ${filteredCommits.length} commits`
+  );
 }
 
 function renderStory(commits, setProgress) {
@@ -235,7 +262,7 @@ function renderStory(commits, setProgress) {
         dateStyle: 'medium', timeStyle: 'short'
       }));
       const paragraph = node.append('p');
-      paragraph.append('span').text(`I changed ${commit.totalLines.toLocaleString()} lines across ${new Set(commit.lines.map(d => d.file)).size} files. `);
+      paragraph.append('span').text(`This commit has ${commit.totalLines.toLocaleString()} recorded lines across ${new Set(commit.lines.map(d => d.file)).size} files. `);
       paragraph.append('a').attr('href', commit.url)
         .attr('target', '_blank').attr('rel', 'noopener noreferrer')
         .text('View this commit');
@@ -255,22 +282,37 @@ async function main() {
     if (!data.length) throw new Error('loc.csv is empty. Generate it using the command in README-LAB6.md.');
     const commits = makeCommits(data);
     const updateChart = createChart(commits);
-    const timeline = d3.scaleTime()
-      .domain(d3.extent(commits, d => d.datetime))
-      .range([0, 100]);
+    // Use the commit index rather than a rounded timestamp. Every slider
+    // position corresponds to a real commit, so files change predictably.
+    progressSlider.min = '0';
+    progressSlider.max = String(commits.length - 1);
+    progressSlider.step = '1';
+    let activeIndex = -1;
 
-    function updateToDate(date) {
-      const filtered = commits.filter(d => d.datetime <= date);
-      progressSlider.value = String(Math.max(0, Math.min(100, timeline(date))));
-      progressTime.textContent = date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
-      progressTime.dateTime = date.toISOString();
+    function updateToIndex(index) {
+      index = Math.max(0, Math.min(commits.length - 1, Math.round(index)));
+      if (index === activeIndex) return;
+      activeIndex = index;
+      const filtered = commits.slice(0, index + 1);
+      const last = commits[index];
+      progressSlider.value = String(index);
+      progressTime.textContent = last.datetime.toLocaleString('en-US', {
+        dateStyle: 'medium', timeStyle: 'short'
+      });
+      progressTime.dateTime = last.datetime.toISOString();
       updateChart(filtered);
       renderCommitInfo(filtered.flatMap(d => d.lines), filtered);
       updateFileDisplay(filtered);
     }
-    progressSlider.addEventListener('input', () => updateToDate(timeline.invert(+progressSlider.value)));
-    updateToDate(timeline.invert(100));
-    renderStory(commits, updateToDate);
+
+    progressSlider.addEventListener('input', () => {
+      updateToIndex(Number(progressSlider.value));
+    });
+    updateToIndex(commits.length - 1);
+    renderStory(commits, date => {
+      const index = commits.findIndex(commit => +commit.datetime === +date);
+      if (index >= 0) updateToIndex(index);
+    });
   } catch (error) {
     console.error(error);
     summary.textContent = `Could not load repository data: ${error.message}`;
