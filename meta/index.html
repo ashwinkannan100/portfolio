@@ -17,6 +17,14 @@
     <input type="range" id="commit-progress" min="0" max="100" value="100" step="1">
   </section>
 
+  <section class="meta-visualization" aria-labelledby="files-heading">
+    <h2 id="files-heading">The race for the biggest file</h2>
+    <p>Each dot represents one recorded line of code. Files are sorted by line count; colors indicate technology, and lighter dots indicate older lines. Move the timeline slider to update this view.</p>
+    <p id="file-status" aria-live="polite"></p>
+    <div id="file-legend" aria-label="Technology color legend"></div>
+    <dl id="files"></dl>
+  </section>
+
   <section class="meta-summary" aria-labelledby="summary-heading">
     <h2 id="summary-heading">Repository summary</h2>
     <div id="commit-info" aria-live="polite">Loading repository data…</div>
@@ -35,13 +43,7 @@
     </div>
   </section>
 
-  <section class="meta-visualization" aria-labelledby="files-heading">
-    <h2 id="files-heading">The race for the biggest file</h2>
-    <p>Each dot represents one recorded line of code. Files are sorted by line count; colors indicate technology, and lighter dots indicate older lines. Move the timeline slider to update this view.</p>
-    <p id="file-status" aria-live="polite"></p>
-    <div id="file-legend" aria-label="Technology color legend"></div>
-    <dl id="files"></dl>
-  </section>
+
 </main>
 
 <dl id="commit-tooltip" class="info tooltip" hidden>

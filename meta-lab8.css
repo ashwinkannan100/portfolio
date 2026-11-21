@@ -29,3 +29,6 @@
 #file-status { font-size: .9em; color: var(--color-text-muted, inherit); opacity: .75; }
 #files .file-row { transition: opacity 160ms ease; }
 #files dd { padding-top: .6em; }
+
+/* Keep timeline controls visible while browsing the file race. */
+.meta-controls { position: sticky; top: 0; z-index: 20; background: Canvas; }
